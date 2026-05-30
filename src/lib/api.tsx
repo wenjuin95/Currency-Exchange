@@ -1,0 +1,52 @@
+const baseUrl = "/bnm-api/public/exchange-rate"
+
+export async function getExchangeRate() {
+	try {
+		const res = await fetch(`${baseUrl}?session=1700&quote=rm`, {
+			headers: {
+				Accept: "application/vnd.BNM.API.v1+json",
+			}
+		})
+
+		if (!res.ok) {
+			throw new Error(`Fail to fetch exchange rate: ${res.status} ${res.statusText}`)
+		}
+
+		const dataList = await res.json()
+		const data = JSON.stringify(dataList, null, 2)
+		return data
+	} catch (err) {
+		console.error(err)
+		return null
+	}
+}
+
+export interface YearMonthPair {
+	year: number;
+	month: number;
+}
+
+export async function getHistoricalRates(countryCode: string, targets: YearMonthPair[]) {
+	try {
+		const fetchPromises = targets.map(async ({ year, month }) => {
+			const url = `${baseUrl}/${countryCode}/year/${year}/month/${month}?session=1700&quote=rm`
+			const res = await fetch(url, {
+				headers: {
+					Accept: "application/vnd.BNM.API.v1+json",
+				}
+			})
+
+			if (!res.ok) {
+				return { year, month, data: { rate: [] } }
+			}
+
+			const data = await res.json()
+			return { year, month, data: data.data }
+		});
+
+		return await Promise.all(fetchPromises);
+	} catch (err) {
+		console.error(err)
+		return null
+	}
+}
