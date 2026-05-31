@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
-import { getExchangeRate, getHistoricalRates, YearMonthPair } from "@/lib/api"
+import { getExchangeRate, getHistoricalRates} from "@/lib/api"
 import CurrencyChart from "@/utils/CurrencyChart"
+import { HistoricalRateData, YearMonthPair  } from "@/lib/types";
 
 type Timeframe = "7D" | "1M" | "5M" | "1Y";
 
 export default function UsdChart() {
 	const [currencies, setCurrencies] = useState<{ country: string,code: string, rate: number }[]>([])
 	const [timeFrame, setTimeFrame] = useState<Timeframe>('1M');
-	const [chartData, setChartData] = useState([]);
+	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	//to figure out the required month-year pairs based on the selected timeframe
@@ -93,7 +94,7 @@ export default function UsdChart() {
 					setCurrencies([{
 						country: "United States",
 						code: "USD",
-						rate: parseFloat(USDRate.rate.middle_rate).toFixed(2)
+						rate: Number(parseFloat(USDRate.rate.middle_rate).toFixed(2))
 					}])
 				}
 			}
@@ -105,37 +106,37 @@ export default function UsdChart() {
 
 	if (loading) return <div>Loading historical data...</div>
 
-return (
-	// w-full makes it fluid, max-w-4xl stops it from stretching too wide on massive screens
-	<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6">
-		<div>
-			<h1 className="font-bold p-3 text-center">1 USD = {currencies[0]?.rate} MYR</h1>
-		</div>
-		<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-			{/* Timeframe Selection Buttons */}
-			<div className="flex gap-1 bg-black/5  p-1 rounded-lg w-full sm:w-auto overflow-x-auto">
-				{(["7D", "1M", "5M", "1Y"] as Timeframe[]).map((range) => (
-					<button
-						key={range}
-						onClick={() => setTimeFrame(range)}
-						className={`flex-1 sm:flex-none text-center px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
-							timeFrame === range
-								? "bg-black/90 text-white shadow-sm"
-								: "text-gray-600 hover:text-black/90"
-						}`}
-					>
-						{range}
-					</button>
-				))}
+	return (
+		// w-full makes it fluid, max-w-4xl stops it from stretching too wide on massive screens
+		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6">
+			<div>
+				<h1 className="font-bold p-3 text-center">1 USD = {currencies[0]?.rate} MYR</h1>
+			</div>
+			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+				{/* Timeframe Selection Buttons */}
+				<div className="flex gap-1 bg-black/5  p-1 rounded-lg w-full sm:w-auto overflow-x-auto">
+					{(["7D", "1M", "5M", "1Y"] as Timeframe[]).map((range) => (
+						<button
+							key={range}
+							onClick={() => setTimeFrame(range)}
+							className={`flex-1 sm:flex-none text-center px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+								timeFrame === range
+									? "bg-black/90 text-white shadow-sm"
+									: "text-gray-600 hover:text-black/90"
+							}`}
+						>
+							{range}
+						</button>
+					))}
+				</div>
+			</div>
+
+			{/* Chart Wrapper: We ensure this container also mimics the exact
+			   responsive height steps we built in Step 1.
+			*/}
+			<div className="w-full h-[250px] md:h-[400px]">
+				<CurrencyChart historicalData={chartData} />
 			</div>
 		</div>
-
-		{/* Chart Wrapper: We ensure this container also mimics the exact
-		   responsive height steps we built in Step 1.
-		*/}
-		<div className="w-full h-[250px] md:h-[400px]">
-			<CurrencyChart historicalData={chartData} />
-		</div>
-	</div>
-);
+	);
 }

@@ -1,3 +1,5 @@
+import { YearMonthPair } from "@/lib/types";
+
 const baseUrl = "/bnm-api/public/exchange-rate"
 
 export async function getExchangeRate() {
@@ -19,11 +21,6 @@ export async function getExchangeRate() {
 		console.error(err)
 		return null
 	}
-}
-
-export interface YearMonthPair {
-	year: number;
-	month: number;
 }
 
 export async function getHistoricalRates(countryCode: string, targets: YearMonthPair[]) {

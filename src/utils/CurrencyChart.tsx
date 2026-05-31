@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { CurrencyChartProps, DayRate, HistoricalMonth} from '@/lib/types';
 
 // 1. Register Chart.js modules
 ChartJS.register(
@@ -22,31 +23,32 @@ ChartJS.register(
   Legend
 );
 
-export default function CurrencyChart({ historicalData }) {
-	const [chartData, setChartData] = useState<any>(null);
+export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
+// 3. Compute chartData dynamically on the fly using useMemo instead of useEffect + useState
+	const chartData = useMemo(() => {
+		if (!historicalData || historicalData.length === 0) return null;
 
-	useEffect(() => {
-		if (!historicalData || historicalData.length === 0) return;
-
-		// 1. Safely filter and extract labels (Dates)
-		const labels = historicalData.flatMap((monthObj: any) => {
-			// Check if monthObj exists, has data, and that data is an array
-			if (monthObj && monthObj.data && Array.isArray(monthObj.data.rate)) {
-				return monthObj.data.rate.map((day: any) => day.date);
-			}
-			return []; // Return an empty array if the month is empty/broken
-		});
-
-		// 2. Safely filter and extract data points (Rates)
-		const rates = historicalData.flatMap((monthObj: any) => {
-			if (monthObj && monthObj.data && Array.isArray(monthObj.data.rate)) {
-				return monthObj.data.rate.map((day: any) => parseFloat(day.middle_rate).toFixed(2));
+		// Extract labels (Dates) securely
+		const labels = historicalData.flatMap((monthObj: HistoricalMonth) => {
+			if (monthObj?.data?.rate && Array.isArray(monthObj.data.rate)) {
+				return monthObj.data.rate.map((day: DayRate) => day.date);
 			}
 			return [];
 		});
 
-		// 3. Set the structured Chart.js data object
-		setChartData({
+		// Extract data points (Rates) securely
+		const rates = historicalData.flatMap((monthObj: HistoricalMonth) => {
+			if (monthObj?.data?.rate && Array.isArray(monthObj.data.rate)) {
+				return monthObj.data.rate.map((day: DayRate) =>
+					typeof day.middle_rate === 'string'
+						? parseFloat(day.middle_rate)
+						: day.middle_rate
+				);
+			}
+			return [];
+		});
+
+		return {
 			labels: labels,
 			datasets: [
 				{
@@ -57,8 +59,8 @@ export default function CurrencyChart({ historicalData }) {
 					tension: 0.2,
 				},
 			],
-		});
-	}, [historicalData]);
+		};
+	}, [historicalData]); // Re-runs ONLY if historicalData reference updates
 
 	// 4. Customise layout rules (Grid lines, titles, etc.)
 	const options = {
