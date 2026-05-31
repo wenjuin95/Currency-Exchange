@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getExchangeRate, getHistoricalRates, YearMonthPair } from "@/lib/api"
-import CurrencyChart from "@/components/chart/CurrencyChart"
+import CurrencyChart from "@/utils/CurrencyChart"
 
 type Timeframe = "7D" | "1M" | "5M" | "1Y";
 

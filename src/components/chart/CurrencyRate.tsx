@@ -3,7 +3,7 @@ import { getExchangeRate } from "@/lib/api"
 import { countryNames } from "@/lib/country_code"
 
 export default function CurrencyRate() {
-	const [currencies, setCurrencies] = useState<{ country: string,code: string, rate: number }[]>([])
+	const [currencies, setCurrencies] = useState<{ country: string, code: string, rate: number }[]>([])
 	const half = Math.ceil(currencies.length / 2);
 	const leftColumnData = currencies.slice(0, half);
 	const rightColumnData = currencies.slice(half);
