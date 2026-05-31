@@ -30,5 +30,9 @@ export interface DayRate {
 }
 
 export interface CurrencyChartProps {
-  historicalData: HistoricalRateData[];
+    historicalData: HistoricalRateData[];
+}
+
+export interface CurrencyWidgetProps {
+    defaultCurrency: string;
 }

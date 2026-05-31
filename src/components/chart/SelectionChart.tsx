@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { getExchangeRate, getHistoricalRates} from "@/lib/api"
 import CurrencyChart from "@/utils/CurrencyChart"
-import { HistoricalRateData, YearMonthPair  } from "@/lib/types";
+import { HistoricalRateData, YearMonthPair, CurrencyWidgetProps} from "@/lib/types";
 
 type Timeframe = "7D" | "1M" | "5M" | "1Y";
 
-export default function UsdChart() {
+export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidgetProps) {
+	const [countryCode, setCountryCode ] = useState<string>(defaultCurrency);
 	const [currencies, setCurrencies] = useState<{ country: string,code: string, rate: number }[]>([])
 	const [timeFrame, setTimeFrame] = useState<Timeframe>('1M');
 	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
@@ -48,7 +49,7 @@ export default function UsdChart() {
 	useEffect(() => {
 		async function getData() {
 			setLoading(true);
-			const targetCountry = "USD";
+			const targetCountry = countryCode;
 
 			// 1. Calculate required months dynamically
 			const requiredTargets = getRequiredMonths(timeFrame);
@@ -89,12 +90,12 @@ export default function UsdChart() {
 					? JSON.parse(exchangeRateData)
 					: exchangeRateData
 
-				const USDRate = exchangeRateList.data.find((item: { currency_code: string }) => item.currency_code === "USD")
-				if (USDRate) {
+				const targetRate = exchangeRateList.data.find((item: { currency_code: string }) => item.currency_code === countryCode)
+				if (targetRate) {
 					setCurrencies([{
-						country: "United States",
-						code: "USD",
-						rate: Number(parseFloat(USDRate.rate.middle_rate).toFixed(2))
+						country: "",
+						code: countryCode,
+						rate: Number(parseFloat(targetRate.rate.middle_rate).toFixed(2))
 					}])
 				}
 			}
@@ -102,7 +103,7 @@ export default function UsdChart() {
 
 		fetchData()
 		getData();
-	}, [timeFrame]); // 🔄 Automatically re-runs whenever the user clicks a different timeframe button!
+	}, [timeFrame, countryCode]); // 🔄 Automatically re-runs whenever the user clicks a different timeframe button!
 
 	if (loading) return <div>Loading historical data...</div>
 
@@ -110,10 +111,12 @@ export default function UsdChart() {
 		// w-full makes it fluid, max-w-4xl stops it from stretching too wide on massive screens
 		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6">
 			<div>
-				<h1 className="font-bold p-3 text-center">1 USD = {currencies[0]?.rate} MYR</h1>
+				<h1 className="font-bold p-3 text-center">1 {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
 			</div>
+
+			{/* Selection Buttons */}
 			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-				{/* Timeframe Selection Buttons */}
+				{/* Timeframe */}
 				<div className="flex gap-1 bg-black/5  p-1 rounded-lg w-full sm:w-auto overflow-x-auto">
 					{(["7D", "1M", "5M", "1Y"] as Timeframe[]).map((range) => (
 						<button
@@ -129,6 +132,20 @@ export default function UsdChart() {
 						</button>
 					))}
 				</div>
+
+				{/*Country*/}
+				<select
+					className="bg-black/5 p-1 rounded-lg text-sm w-full sm:w-auto"
+					value={countryCode}
+					onChange={(e) => setCountryCode(e.target.value)}
+					//disabled // For now, we only have USD data in the chart, so this dropdown is disabled. In the future, we can expand to support more currencies and enable this.
+				>
+					<option value="USD">USD (United States Dollar)</option>
+					<option value="SGD">SGD (Singapore Dollar)</option>
+					<option value="CNY">CNY (Chinese Yuan)</option>
+					<option value="JPY">JPY (Japanese Yen)</option>
+					<option value="KRW">KRW (South Korean Won)</option>
+				</select>
 			</div>
 
 			{/* Chart Wrapper: We ensure this container also mimics the exact

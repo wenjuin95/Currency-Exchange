@@ -1,5 +1,5 @@
 import CurrencyRate from "@/components/chart/CurrencyRate"
-import UsdChart from "@/components/chart/UsdChart"
+import SelectionChart from "@/components/chart/SelectionChart"
 import { getExchangeRate } from "@/lib/api"
 import { useState, useEffect } from "react"
 
@@ -33,8 +33,13 @@ export default function Chart() {
 					<p className="font-semibold text-sm">{updateDate?.getDate()}/{updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/{updateDate?.getFullYear()} ({updateDate?.toLocaleTimeString()})</p>
 				</div>
 			</div>
+
 			<CurrencyRate />
-			<UsdChart />
+
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+				<SelectionChart defaultCurrency="USD" />
+				<SelectionChart defaultCurrency="SGD" />
+			</div>
 		</div>
 	)
 }
