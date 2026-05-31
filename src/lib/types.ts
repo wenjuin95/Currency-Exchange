@@ -36,3 +36,10 @@ export interface CurrencyChartProps {
 export interface CurrencyWidgetProps {
     defaultCurrency: string;
 }
+
+export type ViewType = "rates" | "charts"
+
+export interface ViewToggleNavigationProps {
+    activeView: ViewType;
+    onViewChange: (view: ViewType) => void;
+}

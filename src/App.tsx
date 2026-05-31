@@ -1,11 +1,11 @@
 import Header from "@/components/header/Header"
-import Chart from "@/components/chart/Chart"
+import Overview from "@/components/overview/Overview"
 
 function App() {
 	return (
-		<div>
+		<div className="flex flex-col gap-y-5">
 			<Header />
-			<Chart />
+			<Overview />
 		</div>
 	)
 }
