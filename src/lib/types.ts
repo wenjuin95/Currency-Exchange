@@ -1,12 +1,13 @@
 // Define what an individual rate entry looks like (e.g., daily rate details)
-interface RateEntry {
+export interface RateEntry {
     date: string;
     value: number;
+    middle_rate: number; // Matches the BNM structure cleanly
     // Add other specific properties returned by the BNM API here if needed
 }
 
 // Define the data container
-interface MonthlyDataContainer {
+export interface MonthlyDataContainer {
     rate: RateEntry[];
 }
 
@@ -18,26 +19,16 @@ export interface HistoricalRateData {
 }
 
 export interface YearMonthPair {
-	year: number;
-	month: number;
+    year: number;
+    month: number;
 }
 
-// 2. Define strict structures for TypeScript
 export interface DayRate {
-  date: string;
-  middle_rate: string | number; // Handles both API structures safely
-}
-
-interface MonthData {
-  rate: DayRate[];
-}
-
-export interface HistoricalMonth {
-  year: number;
-  month: number;
-  data: MonthData;
+    date: string;
+    middle_rate: string | number; // Matches the BNM structure cleanly
+    // Add other properties if BNM returns them (e.g., buying_rate, selling_rate)
 }
 
 export interface CurrencyChartProps {
-  historicalData: HistoricalMonth[];
+  historicalData: HistoricalRateData[];
 }

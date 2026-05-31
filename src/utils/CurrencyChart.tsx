@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { CurrencyChartProps, DayRate, HistoricalMonth} from '@/lib/types';
+import { CurrencyChartProps, RateEntry, HistoricalRateData} from '@/lib/types';
 
 // 1. Register Chart.js modules
 ChartJS.register(
@@ -29,21 +29,17 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 		if (!historicalData || historicalData.length === 0) return null;
 
 		// Extract labels (Dates) securely
-		const labels = historicalData.flatMap((monthObj: HistoricalMonth) => {
+		const labels = historicalData.flatMap((monthObj: HistoricalRateData) => {
 			if (monthObj?.data?.rate && Array.isArray(monthObj.data.rate)) {
-				return monthObj.data.rate.map((day: DayRate) => day.date);
+				return monthObj.data.rate.map((day: RateEntry) => day.date);
 			}
 			return [];
 		});
 
 		// Extract data points (Rates) securely
-		const rates = historicalData.flatMap((monthObj: HistoricalMonth) => {
+		const rates = historicalData.flatMap((monthObj: HistoricalRateData) => {
 			if (monthObj?.data?.rate && Array.isArray(monthObj.data.rate)) {
-				return monthObj.data.rate.map((day: DayRate) =>
-					typeof day.middle_rate === 'string'
-						? parseFloat(day.middle_rate)
-						: day.middle_rate
-				);
+				return monthObj.data.rate.map((day: RateEntry) => Number(day.middle_rate).toFixed(2));
 			}
 			return [];
 		});
@@ -92,7 +88,7 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 			y: {
 				ticks: {
 					// Formats numbers to look like currency decimals
-					callback: (value: any) => parseFloat(value).toFixed(2),
+					callback: (value: number | string) => Number(value).toFixed(2),
 				},
 			},
 		},
