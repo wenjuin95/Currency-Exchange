@@ -46,10 +46,78 @@ export const per100UnitCurrencies = new Set([
 	"NPR",
 ])
 
-export const lowValuecurrencies = new Set([
+export const use1000units = new Set([
 	"IDR",
 	"VND",
 	"KHR",
 	"MMK",
 	"KRW",
 ])
+
+export const use100units = new Set([
+	"AED",
+	"JPY",
+	"HKD",
+	"THB",
+	"PHP",
+	"TWD",
+])
+
+export const currencyRegions: Record<string, string[]> = {
+	"Popular": ["USD", "SGD", "JPY", "CNY", "KRW"],
+
+	"Southeast Asia": [
+		"SGD",
+		"MYR",
+		"IDR",
+		"THB",
+		"PHP",
+		"VND",
+		"KHR",
+		"MMK",
+		"BND",
+	],
+
+	"East Asia": [
+		"JPY",
+		"KRW",
+		"CNY",
+		"HKD",
+		"TWD",
+	],
+
+	"South Asia": [
+		"INR",
+		"PKR",
+		"NPR",
+	],
+
+	"Middle East": [
+		"AED",
+		"SAR",
+	],
+
+	"Europe": [
+		"EUR",
+		"GBP",
+		"CHF",
+	],
+
+	"North America": [
+		"USD",
+		"CAD",
+	],
+
+	"Oceania": [
+		"AUD",
+		"NZD",
+	],
+
+	"Africa": [
+		"EGP",
+	],
+
+	"International": [
+		"SDR",
+	],
+};

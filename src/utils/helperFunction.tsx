@@ -1,5 +1,5 @@
 import { Api } from "@/lib/api";
-import { countryNames, per100UnitCurrencies, lowValuecurrencies } from "@/lib/country_code";
+import { countryNames, per100UnitCurrencies, use1000units, use100units } from "@/lib/country_code";
 import { HistoricalRateData, YearMonthPair, Timeframe, FormattedCurrency } from "@/lib/types"
 
 export class HelperFunction {
@@ -68,15 +68,15 @@ export class HelperFunction {
 	 * @return the list of all country with their currency code and exchange rate
 	 * @note call the core api function to get the raw data, then loop through and build the clean layout your UI components want
 	 * @note use the country code to get the country name from the countryNames mapping file
-	 * @note parse the middle_rate to 2 decimal places for better display
+	 * @note divide 100 because some country have their rate based on 100 unit instead of 1 unit
+	 * @note check 100 unit or 1000 unit currency and adjust the rate accordingly for better display
+	 * @note parse the middle_rate to 4 decimal places for better display
 	*/
 	static async getAllCountryCurrencyAndRate(): Promise<FormattedCurrency[]> {
 		try {
-			// Calls the core fetch function right above it!
 			const exchangeRateData = await Api.getAllCountryExchangeRate();
 			if (!exchangeRateData) return [];
 
-			// Parse it back to an object safely if it returned as a string
 			const exchangeRateList = typeof exchangeRateData === "string"
 				? JSON.parse(exchangeRateData)
 				: exchangeRateData;
@@ -85,7 +85,7 @@ export class HelperFunction {
 				return [];
 			}
 
-			// Loop through and build the clean layout your UI components want
+
 			return exchangeRateList.data.map((item: { currency_code: string; rate: { middle_rate: string } }) => {
 				const code = item.currency_code || "";
 				let middleRate = parseFloat(item.rate.middle_rate || "0");
@@ -95,13 +95,18 @@ export class HelperFunction {
 				}
 
 
-				const targetunit = lowValuecurrencies.has(code) ? 1000 : 1;
+				let targetunit = 1;
+				if (use1000units.has(code)) {
+					targetunit = 1000;
+				} else if (use100units.has(code)) {
+					targetunit = 100;
+				}
 				const finalRate = middleRate * targetunit;
 
 				return {
 					country: countryNames[code] || code,
 					code: code,
-					rate: finalRate.toFixed(2),
+					rate: finalRate.toFixed(4),
 					unit: targetunit
 				};
 			});

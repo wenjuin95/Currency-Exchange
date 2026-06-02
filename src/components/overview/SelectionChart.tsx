@@ -18,6 +18,7 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 
 			if (results) {
 				let processedResults = [...results];
+				// console.log("Raw API results for historical rates:", processedResults);
 
 				if (timeFrame === "7D") {
 					processedResults = HelperFunction.processDataFor7D(results);

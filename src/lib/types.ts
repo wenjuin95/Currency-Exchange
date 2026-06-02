@@ -3,11 +3,11 @@ export interface RateEntry {
 	date: string;
 	value: number;
 	middle_rate: number; // Matches the BNM structure cleanly
-	// Add other specific properties returned by the BNM API here if needed
 }
 
 // Define the data container
 export interface MonthlyDataContainer {
+	currency_code: string;
 	rate: RateEntry[];
 }
 
@@ -26,7 +26,6 @@ export interface YearMonthPair {
 export interface DayRate {
 	date: string;
 	middle_rate: string | number; // Matches the BNM structure cleanly
-	// Add other properties if BNM returns them (e.g., buying_rate, selling_rate)
 }
 
 export interface CurrencyChartProps {
