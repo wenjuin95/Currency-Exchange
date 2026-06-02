@@ -12,7 +12,7 @@ export default function ViewToggleNavigation({ activeView, onViewChange }: ViewT
                         : "text-gray-600 hover:text-black/90 hover:bg-black/5"
                 }`}
             >
-                Currency Rates
+                All Country Rates
             </button>
             <button
                 type="button"
@@ -23,7 +23,7 @@ export default function ViewToggleNavigation({ activeView, onViewChange }: ViewT
                         : "text-gray-600 hover:text-black/90 hover:bg-black/5"
                 }`}
             >
-                Trend Charts
+                Currency Charts
             </button>
         </div>
     )

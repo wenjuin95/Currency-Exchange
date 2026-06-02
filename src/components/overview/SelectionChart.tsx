@@ -1,112 +1,46 @@
 import { useEffect, useState } from "react"
-import { getExchangeRate, getHistoricalRates} from "@/lib/api"
 import CurrencyChart from "@/utils/CurrencyChart"
-import { HistoricalRateData, YearMonthPair, CurrencyWidgetProps} from "@/lib/types";
-
-type Timeframe = "7D" | "1M" | "5M" | "1Y";
+import { HelperFunction } from "@/utils/helperFunction";
+import { Api } from "@/lib/api"
+import { HistoricalRateData, CurrencyWidgetProps, Timeframe, FormattedCurrency} from "@/lib/types";
 
 export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidgetProps) {
 	const [countryCode, setCountryCode ] = useState<string>(defaultCurrency);
-	const [currencies, setCurrencies] = useState<{ country: string,code: string, rate: number }[]>([])
+	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([])
 	const [timeFrame, setTimeFrame] = useState<Timeframe>('1M');
 	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
-	//to figure out the required month-year pairs based on the selected timeframe
-	const getRequiredMonths = (range: Timeframe): YearMonthPair[] => {
-		const targets: YearMonthPair[] = [];
-		const currentDate = new Date();
-
-		let monthsToGoBack = 1;
-		switch (range) {
-			case "7D":
-				monthsToGoBack = 1;
-				break;
-			case "1M":
-				monthsToGoBack = 1;
-				break;
-			case "5M":
-				monthsToGoBack = 5;
-				break;
-			case "1Y":
-				monthsToGoBack = 12;
-				break;
-		}
-
-		//loop backward form today month to generate the list
-		for (let i = 0; i < monthsToGoBack; i++) {
-			const d = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
-			targets.push({
-				year: d.getFullYear(),
-				month: d.getMonth() + 1, // getMonth() returns 0-based month
-			});
-		}
-
-		// reverse to have the oldest month first, which is more intuitive for charting
-		return targets.reverse();
-	}
 
 	useEffect(() => {
-		async function getData() {
+		async function retrieveTimeFrameData() {
 			const targetCountry = countryCode;
-
-			// 1. Calculate required months dynamically
-			const requiredTargets = getRequiredMonths(timeFrame);
-
-			// 2. Fetch the data block from BNM
-			const results = await getHistoricalRates(targetCountry, requiredTargets);
+			const requiredTargets = HelperFunction.getRequiredMonths(timeFrame);
+			const results = await Api.getHistoricalRates(targetCountry, requiredTargets);
 
 			if (results) {
 				let processedResults = [...results];
 
-				// 3. Special rule for 7 Days: If the user clicked "7D", we filter the final
-				// nested rates down to just the last 7 entries so the chart isn't crowded.
 				if (timeFrame === "7D") {
-					processedResults = results.map(monthObj => {
-                        if (monthObj.data && Array.isArray(monthObj.data.rate)) {
-                            return {
-                                ...monthObj,
-								data: {
-                                    ...monthObj.data,
-									// Take only the last 7 items available in the dataset
-									rate: monthObj.data.rate.slice(-7)
-								}
-							};
-						}
-                        console.log("Processing month:", monthObj.year, monthObj.month, "with", monthObj.data?.rate.length, "entries");
-						return monthObj;
-					});
+					processedResults = HelperFunction.processDataFor7D(results);
 				}
-
 				setChartData(processedResults);
 			}
 		}
+		retrieveTimeFrameData();
 
-        //TODO - change this code to use the api
-		async function fetchData() {
-			const exchangeRateData = await getExchangeRate()
-			if (exchangeRateData) {
-				const exchangeRateList = typeof exchangeRateData === "string"
-					? JSON.parse(exchangeRateData)
-					: exchangeRateData
-
-				const targetRate = exchangeRateList.data.find((item: { currency_code: string }) => item.currency_code === countryCode)
-				if (targetRate) {
-					setCurrencies([{
-						country: "",
-						code: countryCode,
-						rate: Number(parseFloat(targetRate.rate.middle_rate).toFixed(2))
-					}])
-				}
+		async function getTargetedCountryCurrencyAndRate() {
+			const allCurrencies = await HelperFunction.getAllCountryCurrencyAndRate();
+			const targetCurrency = allCurrencies.find((item: FormattedCurrency) => item.code === countryCode);
+			if (targetCurrency) {
+				setCurrencies([targetCurrency]);
 			}
 		}
-
-		fetchData()
-		getData();
-	}, [timeFrame, countryCode]); // 🔄 Automatically re-runs whenever the user clicks a different timeframe button!
+		getTargetedCountryCurrencyAndRate();
+	}, [timeFrame, countryCode]); // Automatically re-runs whenever the user clicks a different timeframe button!
 
 	return (
 		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
 			<div>
-				<h1 className="font-bold p-3 text-center">1 {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
+				<h1 className="font-bold p-3 text-center">{currencies[0]?.unit || 1} {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
 			</div>
 
 			{/* Selection Buttons */}

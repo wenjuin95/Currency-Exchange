@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import CurrencyRate from "@/components/overview/CurrencyRate"
 import SelectionChart from "@/components/overview/SelectionChart"
 import ViewToggleNavigation from "@/components/overview/ViewToggleNavigation";
-import { getExchangeRate } from "@/lib/api"
+import { HelperFunction } from "@/utils/helperFunction";
 import { ViewType } from "@/lib/types"
 
 export default function Overview() {
@@ -11,17 +11,9 @@ export default function Overview() {
 
 	useEffect(() => {
 		async function updateDate() {
-			const data = await getExchangeRate()
-			if (data) {
-				const dataList = typeof data === "string"
-					? JSON.parse(data)
-					: data
-				const updateDate = dataList.meta.last_updated;
-				console.log("Last Updated:", updateDate)
-				setUpdateDate(new Date(updateDate))
-			}
+			const lastestDate = await HelperFunction.getlastetUpdateDate();
+			setUpdateDate(lastestDate)
 		}
-
 		updateDate()
 	}, [])
 

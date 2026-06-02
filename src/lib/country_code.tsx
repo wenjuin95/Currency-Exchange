@@ -27,3 +27,29 @@ export const countryNames: Record<string, string> = {
   USD: "United States",
   VND: "Vietnam",
 };
+
+export const per100UnitCurrencies = new Set([
+	"JPY",
+	"HKD",
+	"THB",
+	"PHP",
+	"TWD",
+	"KRW",
+	"IDR",
+	"SAR",
+	"VND",
+	"KHR",
+	"MMK",
+	"INR",
+	"AED",
+	"PKR",
+	"NPR",
+])
+
+export const lowValuecurrencies = new Set([
+	"IDR",
+	"VND",
+	"KHR",
+	"MMK",
+	"KRW",
+])

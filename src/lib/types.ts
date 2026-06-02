@@ -37,6 +37,7 @@ export interface CurrencyWidgetProps {
 	defaultCurrency: string;
 }
 
+export type Timeframe = "7D" | "1M" | "5M" | "1Y";
 export type ViewType = "rates" | "charts"
 
 export interface ViewToggleNavigationProps {
@@ -48,4 +49,5 @@ export interface FormattedCurrency {
 	country: string;
 	code: string;
 	rate: number;
+	unit: number;
 }
