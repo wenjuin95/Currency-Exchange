@@ -1,4 +1,6 @@
 import { YearMonthPair } from "@/lib/types";
+import { countryNames } from "@/lib/country_code";
+import { FormattedCurrency } from "@/lib/types";
 
 const baseUrl = "/bnm-api/public/exchange-rate"
 
@@ -20,6 +22,38 @@ export async function getExchangeRate() {
 	} catch (err) {
 		console.error(err)
 		return null
+	}
+}
+
+export async function getFormattedExchangeRate(): Promise<FormattedCurrency[]> {
+	try {
+		// Calls the core fetch function right above it!
+		const exchangeRateData = await getExchangeRate();
+		if (!exchangeRateData) return [];
+
+		// Parse it back to an object safely if it returned as a string
+		const exchangeRateList = typeof exchangeRateData === "string"
+			? JSON.parse(exchangeRateData)
+			: exchangeRateData;
+
+		if (!exchangeRateList?.data || !Array.isArray(exchangeRateList.data)) {
+			return [];
+		}
+
+		// Loop through and build the clean layout your UI components want
+		return exchangeRateList.data.map((item: { currency_code: string; rate: { middle_rate: string } }) => {
+			const code = item.currency_code || "";
+			const middleRate = item.rate?.middle_rate || "0";
+
+			return {
+				country: countryNames[code] || code,
+				code: code,
+				rate: parseFloat(middleRate).toFixed(2)
+			};
+		});
+	} catch (err) {
+		console.error("Error inside getFormattedExchangeRates processing loop:", err);
+		return [];
 	}
 }
 

@@ -33,14 +33,23 @@ export default function Overview() {
 
 
 				<div className="flex items-center gap-x-2 bg-gray-100 px-3 py-1.5 rounded-full">
-					<div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"/>
-					<p className="font-semibold text-sm">Last Updated:</p>
+					{/*<div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"/>
 					<p className="font-semibold text-sm">
 						{updateDate
-							? `${updateDate?.getDate()}/${updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/${updateDate?.getFullYear()} (${updateDate?.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})})`
+							? `Last Updated: ${updateDate?.getDate()}/${updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/${updateDate?.getFullYear()} (${updateDate?.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})})`
 							: "Loading..."
 						}
-					</p>
+					</p>*/}
+					{updateDate ? (
+						<>
+							<div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"/>
+							<p className="font-semibold text-sm">
+								Last Updated: {updateDate?.getDate()}/{updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/{updateDate?.getFullYear()} ({updateDate?.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})})
+							</p>
+						</>
+					):(
+						<p className="font-semibold text-sm">Loading...</p>
+					)}
 				</div>
 			</div>
 

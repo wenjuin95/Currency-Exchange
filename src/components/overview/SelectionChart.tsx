@@ -10,8 +10,6 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 	const [currencies, setCurrencies] = useState<{ country: string,code: string, rate: number }[]>([])
 	const [timeFrame, setTimeFrame] = useState<Timeframe>('1M');
 	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
-	const [loading, setLoading] = useState(true);
-
 	//to figure out the required month-year pairs based on the selected timeframe
 	const getRequiredMonths = (range: Timeframe): YearMonthPair[] => {
 		const targets: YearMonthPair[] = [];
@@ -48,7 +46,6 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 
 	useEffect(() => {
 		async function getData() {
-			setLoading(true);
 			const targetCountry = countryCode;
 
 			// 1. Calculate required months dynamically
@@ -64,25 +61,26 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 				// nested rates down to just the last 7 entries so the chart isn't crowded.
 				if (timeFrame === "7D") {
 					processedResults = results.map(monthObj => {
-						if (monthObj.data && Array.isArray(monthObj.data.rate)) {
-							return {
-								...monthObj,
+                        if (monthObj.data && Array.isArray(monthObj.data.rate)) {
+                            return {
+                                ...monthObj,
 								data: {
-									...monthObj.data,
+                                    ...monthObj.data,
 									// Take only the last 7 items available in the dataset
 									rate: monthObj.data.rate.slice(-7)
 								}
 							};
 						}
+                        console.log("Processing month:", monthObj.year, monthObj.month, "with", monthObj.data?.rate.length, "entries");
 						return monthObj;
 					});
 				}
 
 				setChartData(processedResults);
 			}
-			setLoading(false);
 		}
 
+        //TODO - change this code to use the api
 		async function fetchData() {
 			const exchangeRateData = await getExchangeRate()
 			if (exchangeRateData) {
@@ -105,11 +103,8 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 		getData();
 	}, [timeFrame, countryCode]); // 🔄 Automatically re-runs whenever the user clicks a different timeframe button!
 
-	if (loading) return <div>Loading historical data...</div>
-
 	return (
-		// w-full makes it fluid, max-w-4xl stops it from stretching too wide on massive screens
-		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6">
+		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
 			<div>
 				<h1 className="font-bold p-3 text-center">1 {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
 			</div>
@@ -148,9 +143,6 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 				</select>
 			</div>
 
-			{/* Chart Wrapper: We ensure this container also mimics the exact
-			   responsive height steps we built in Step 1.
-			*/}
 			<div className="w-full h-[250px] md:h-[400px]">
 				<CurrencyChart historicalData={chartData} />
 			</div>
