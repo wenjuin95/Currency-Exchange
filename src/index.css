@@ -24,6 +24,8 @@
 
   font: 18px/145% var(--mono);
   background: var(--theme-bg);
+  color-scheme: light dark;
+  transition: color 180ms ease, background-color 180ms ease;
 
   @media (max-width: 1024px) {
     font-size: 16px;
@@ -55,7 +57,7 @@ h1 {
   letter-spacing: -1.68px;
   margin: 32px 0;
   @media (max-width: 1024px) {
-    font-size: 36px;
+    font-size: 34px;
     margin: 20px 0;
   }
 }
@@ -71,6 +73,7 @@ h2 {
   }
 }
 p {
+  color: var(--theme-muted-text);
   margin: 0;
 }
 
@@ -137,4 +140,55 @@ p {
   .bg-theme-muted-10 { background-color: var(--theme-muted-bg-10) !important; }
   .bg-theme-input { background-color: var(--theme-input-bg) !important; }
   .bg-theme-input-weak { background-color: var(--theme-input-bg-weak) !important; }
+}
+
+/* Respect system dark mode by default; override with .dark on <html> for explicit preference */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --theme-muted-text: #9ca3af;
+    --theme-strong-text: #f3f4f6;
+    --theme-bg: #16171d;
+    --theme-card-bg: #1f2028;
+    --theme-chart-accent: #c084fc;
+    --theme-chart-accent-bg: rgba(192,132,252,0.15);
+    --theme-strong-bg: rgba(255,255,255,0.03);
+    --theme-muted-bg: rgba(255,255,255,0.03);
+    --theme-muted-bg-10: rgba(255,255,255,0.06);    npm run dev
+    # open the site and click the header toggle
+    --theme-input-bg: rgba(255,255,255,0.02);
+    --theme-input-bg-weak: rgba(255,255,255,0.03);
+    --shadow: rgba(0,0,0,0.4) 0 10px 15px -3px, rgba(0,0,0,0.25) 0 4px 6px -2px;
+  }
+} */
+
+/* Explicit dark mode via `dark` class on <html> overrides other settings */
+.dark {
+  --theme-muted-text: #9ca3af;
+  --theme-strong-text: #f3f4f6;
+  --theme-bg: #16171d;
+  --theme-card-bg: #1f2028;
+  --theme-chart-accent: #00fff2;
+  --theme-chart-accent-bg: rgba(192,132,252,0.15);
+  --theme-strong-bg: rgba(255,255,255,0.03);
+  --theme-muted-bg: rgba(255,255,255,0.03);
+  --theme-muted-bg-10: rgba(255,255,255,0.06);
+  --theme-input-bg: rgba(255,255,255,0.02);
+  --theme-input-bg-weak: rgba(255,255,255,0.03);
+  --shadow: rgba(0,0,0,0.4) 0 10px 15px -3px, rgba(0,0,0,0.25) 0 4px 6px -2px;
+}
+
+/* When the .dark class is active on the html tag */
+.dark select,
+.dark select optgroup,
+.dark select option {
+  background-color: #16171d ; /* Forces your solid dark background color */
+  color-scheme: dark;                   /* Tells the OS to flip scrollbars and system highlights */
+}
+
+/* When the dark class is NOT active (Light Mode) */
+html:not(.dark) select,
+html:not(.dark) select optgroup,
+html:not(.dark) select option {
+  background-color: #f8fafc;
+  color-scheme: light;
 }

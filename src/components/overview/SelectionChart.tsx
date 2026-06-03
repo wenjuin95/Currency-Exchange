@@ -65,7 +65,7 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 
 				{/*Country*/}
 				<select
-					className="bg-theme-muted p-1 rounded-lg text-sm w-full sm:w-auto"
+					className="text-theme-muted p-1 rounded-lg text-sm w-full sm:w-auto"
 					value={countryCode}
 					onChange={(e) => setCountryCode(e.target.value)}
 					//disabled // For now, we only have USD data in the chart, so this dropdown is disabled. In the future, we can expand to support more currencies and enable this.

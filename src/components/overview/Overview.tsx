@@ -35,8 +35,8 @@ export default function Overview() {
 					{updateDate ? (
 						<>
 							<div className="w-2 h-2 bg-theme-success rounded-full animate-pulse "/>
-							<p className="font-semibold text-sm">
-								Last Updated: {updateDate?.getDate()}/{updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/{updateDate?.getFullYear()} ({updateDate?.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})})
+							<p className="font-semibold text-xs lg:text-sm">
+								Updated: {updateDate?.getDate()}/{updateDate?.getMonth() !== undefined ? updateDate.getMonth() + 1 : ''}/{updateDate?.getFullYear()} ({updateDate?.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})})
 							</p>
 						</>
 					):(

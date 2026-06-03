@@ -74,17 +74,19 @@ export default function CurrencyConverter() {
 						<select
 							value={selectCountry}
 							onChange={(e) => setSelectCountry(e.target.value)}
-							className="border rounded-lg px-3 py-2 text-sm bg-theme-input font-bold focus:outline-none w-full cursor-pointer"
+							className="border rounded-lg px-3 py-2 text-sm bg-theme-input text-theme-muted font-bold focus:outline-none w-full cursor-pointer"
 						>
 							{groupedCurrencies.map(group => (
 								<optgroup
 									key={group.region}
 									label={group.region}
+									className="text-theme-strong font-bold"
 								>
 									{group.currencies.map(currency => (
 										<option
 											key={currency.code}
 											value={currency.code}
+											className="text-theme-muted"
 										>
 											{currency.code} - {currency.country} ({currency.unit.toLocaleString()} Unit)
 										</option>
@@ -105,7 +107,7 @@ export default function CurrencyConverter() {
 							placeholder="0.00"
 							value={amount}
 							onChange={(e) => handleAmountChange(e.target.value)}
-							className="border rounded-lg px-3 py-2 text-base lg:text-lg font-black w-full focus:outline-none focus:ring-2 bg-theme-input-weak"
+							className="border rounded-lg px-3 py-2 text-base lg:text-lg bg-theme-input text-theme-strong w-full focus:outline-none focus:ring-1 "
 						/>
 					</div>
 
