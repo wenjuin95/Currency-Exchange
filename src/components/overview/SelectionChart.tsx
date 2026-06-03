@@ -7,7 +7,7 @@ import { HistoricalRateData, CurrencyWidgetProps, Timeframe, FormattedCurrency} 
 export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidgetProps) {
 	const [countryCode, setCountryCode ] = useState<string>(defaultCurrency);
 	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([])
-	const [timeFrame, setTimeFrame] = useState<Timeframe>('1M');
+	const [timeFrame, setTimeFrame] = useState<Timeframe>('7D');
 	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
 
 	useEffect(() => {

@@ -43,20 +43,24 @@ export class HelperFunction {
 	 * process data for 7 days since data is provice a monthly basic
 	 * @param data the list of monthly data provided by the api
 	 * @return the list of monthly data with only 7 days if the timeframe is 7D
-	 * @note filter out empty month first so we only look at month with real data\
+	 * @note filter out empty month first so we only look at month with real data
+	 * @note flatten all the valid month into a single array of daily data, then slice the last 7 days for the chart
 	 * @note "....rate.slice(-7)" => take the latest month with data and slice the last 7 days for the chart
 	*/
 	static processDataFor7D(data: HistoricalRateData[]): HistoricalRateData[] {
 		const validMonth = data.filter(
 			monthObj => monthObj.data && Array.isArray(monthObj.data.rate) && monthObj.data.rate.length > 0
-		)
+		);
+		if (validMonth.length === 0) return [];
+		const allFlattenedRates = validMonth.flatMap(monthObj => monthObj.data.rate);
+		const latest7Days = allFlattenedRates.slice(-7);
 		const latestActiveMonth = validMonth[validMonth.length - 1];
 		if (latestActiveMonth) {
 			return [{
 				...latestActiveMonth,
 				data: {
 					...latestActiveMonth.data,
-					rate: latestActiveMonth.data.rate.slice(-7)
+					rate: latest7Days,
 				}
 			}];
 		}
@@ -136,6 +140,39 @@ export class HelperFunction {
 		} catch (err) {
 			console.error("Error fetching latest update date:", err);
 			return null;
+		}
+	}
+
+	/**
+	 * Get the current hour in Kuala Lumpur timezone
+	 * @return the current hour in Kuala Lumpur timezone
+	*/
+	static getCurrentHour() {
+		const now = new Date();
+		const formatter = new Intl.DateTimeFormat('en-MY', {
+			timeZone: 'Asia/Kuala_Lumpur',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false,
+		});
+		const parts = formatter.formatToParts(now);
+		const hour = parts.find(part => part.type === 'hour')?.value || "00";
+		return hour;
+	}
+
+	/**
+	 * Determine the current session (0900 or 1700) based on the hour in Kuala Lumpur timezone
+	 * @param hour the current hour in Kuala Lumpur timezone
+	 * @return "0900" if it's between 9am and 5pm, otherwise return "1700"
+	*/
+	static getCurrentSession(hour: number) {
+		if (hour >= 9 && hour < 12) {
+			return "0900";
+		} else if (hour >= 12 && hour < 17) {
+			return "1200";
+		} else {
+			return "1700";
 		}
 	}
 }

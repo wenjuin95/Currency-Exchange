@@ -1,11 +1,14 @@
 import { YearMonthPair } from "@/lib/types";
+import { HelperFunction } from "@/utils/helperFunction";
 
 const baseUrl = "/bnm-api/public/exchange-rate"
 
 export class Api {
 	static async getAllCountryExchangeRate() {
 		try {
-			const res = await fetch(`${baseUrl}?session=1700&quote=rm`, {
+			const hour = HelperFunction.getCurrentHour();
+			const session = HelperFunction.getCurrentSession(parseInt(hour));
+			const res = await fetch(`${baseUrl}?session=${session}&quote=rm`, {
 				headers: {
 					Accept: "application/vnd.BNM.API.v1+json",
 				}
@@ -26,8 +29,10 @@ export class Api {
 
 	static async getHistoricalRates(countryCode: string, targets: YearMonthPair[]) {
 		try {
+			const hour = HelperFunction.getCurrentHour();
+			const session = HelperFunction.getCurrentSession(parseInt(hour));
 			const fetchPromises = targets.map(async ({ year, month }) => {
-				const url = `${baseUrl}/${countryCode}/year/${year}/month/${month}?session=1700&quote=rm`
+				const url = `${baseUrl}/${countryCode}/year/${year}/month/${month}?session=${session}&quote=rm`
 				const res = await fetch(url, {
 					headers: {
 						Accept: "application/vnd.BNM.API.v1+json",

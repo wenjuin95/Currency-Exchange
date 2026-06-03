@@ -28,7 +28,7 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 // 3. Compute chartData dynamically on the fly using useMemo instead of useEffect + useState
 	const chartData = useMemo(() => {
 		if (!historicalData || historicalData.length === 0) return null;
-		console.log("Processing chart data from historicalData:", historicalData);
+		// console.log("Processing chart data from historicalData:", historicalData);
 
 		// Extract labels (Dates) securely
 		const labels = historicalData.flatMap((monthObj: HistoricalRateData) => {
@@ -39,9 +39,9 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 		});
 
 		// Extract data points (Rates) securely
-		const countryCode = historicalData[0]?.data?.currency_code || ""; // Safely access currency code
+		// const countryCode = historicalData[0]?.data?.currency_code || ""; // Safely access currency code
 		const rates = historicalData.flatMap((monthObj: HistoricalRateData) => {
-			console.log(`Country code for per100Unit check: ${countryCode}`);
+			// console.log(`Country code for per100Unit check: ${countryCode}`);
 			if (monthObj?.data?.rate && Array.isArray(monthObj.data.rate)) {
 				return monthObj.data.rate.map((day: RateEntry) => Number(day.middle_rate).toFixed(3));
 			}
