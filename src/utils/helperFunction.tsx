@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Api } from "@/lib/api";
 import { countryNames, per100UnitCurrencies, use1000units, use100units } from "@/lib/country_code";
 import { HistoricalRateData, YearMonthPair, Timeframe, FormattedCurrency } from "@/lib/types"
@@ -174,5 +175,21 @@ export class HelperFunction {
 		} else {
 			return "1700";
 		}
+	}
+
+	static handleAmountInput(initialValue: string) {
+		const [amount, setAmount] = useState<string>(initialValue);
+		const handleAmountChange = (inputValue: string) => {
+			const sanitized = inputValue.replace(/[^0-9.]/g, "");
+			if (sanitized.split(".").length > 2) {
+				return;
+			}
+			setAmount(sanitized);
+		};
+
+		return {
+			amount,
+			handleAmountChange
+		};
 	}
 }

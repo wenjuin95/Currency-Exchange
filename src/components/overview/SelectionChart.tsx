@@ -1,47 +1,24 @@
-import { useEffect, useState } from "react"
 import CurrencyChart from "@/utils/CurrencyChart"
-import { HelperFunction } from "@/utils/helperFunction";
-import { Api } from "@/lib/api"
-import { HistoricalRateData, CurrencyWidgetProps, Timeframe, FormattedCurrency} from "@/lib/types";
+import { useChartData } from "@/hooks/useChartData";
+import { CurrencyWidgetProps, Timeframe} from "@/lib/types";
 
 export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidgetProps) {
-	const [countryCode, setCountryCode ] = useState<string>(defaultCurrency);
-	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([])
-	const [timeFrame, setTimeFrame] = useState<Timeframe>('7D');
-	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
-
-	useEffect(() => {
-		async function retrieveTimeFrameData() {
-			const targetCountry = countryCode;
-			const requiredTargets = HelperFunction.getRequiredMonths(timeFrame);
-			const results = await Api.getHistoricalRates(targetCountry, requiredTargets);
-
-			if (results) {
-				let processedResults = [...results];
-				// console.log("Raw API results for historical rates:", processedResults);
-
-				if (timeFrame === "7D") {
-					processedResults = HelperFunction.processDataFor7D(results);
-				}
-				setChartData(processedResults);
-			}
-		}
-		retrieveTimeFrameData();
-
-		async function getTargetedCountryCurrencyAndRate() {
-			const allCurrencies = await HelperFunction.getAllCountryCurrencyAndRate();
-			const targetCurrency = allCurrencies.find((item: FormattedCurrency) => item.code === countryCode);
-			if (targetCurrency) {
-				setCurrencies([targetCurrency]);
-			}
-		}
-		getTargetedCountryCurrencyAndRate();
-	}, [timeFrame, countryCode]); // Automatically re-runs whenever the user clicks a different timeframe button!
+	const {
+		countryCode,
+		setCountryCode,
+		timeFrame,
+		setTimeFrame,
+		chartData,
+		activeCurrency
+	} = useChartData(defaultCurrency);
 
 	return (
 		<div className="w-full max-w-4xl mx-auto bg-theme-muted rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
+			{/* title and current rate */}
 			<div>
-				<h1 className="font-bold p-3 text-center">{currencies[0]?.unit || 1} {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
+				<h1 className="font-bold p-3 text-center tracking-tight text-lg lg:text-xl text-theme-strong">
+					{activeCurrency?.unit || 1} {activeCurrency?.code || countryCode} = {activeCurrency?.rate ?? "-"} MYR
+				</h1>
 			</div>
 
 			{/* Selection Buttons */}
@@ -78,6 +55,7 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 				</select>
 			</div>
 
+			{/* display the chart */}
 			<div className="w-full h-[250px] md:h-[400px]">
 				<CurrencyChart historicalData={chartData} />
 			</div>

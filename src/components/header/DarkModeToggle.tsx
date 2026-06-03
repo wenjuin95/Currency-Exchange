@@ -41,7 +41,7 @@ export default function DarkModeToggle() {
 			{/* 2. The inner sliding circle knob */}
 			<span
 				className={`
-					flex h-5 w-5 items-center justify-center rounded-full bg-theme-strong shadow-md
+					flex h-5 w-5 items-center justify-center rounded-full bg-black shadow-md
 					transform transition duration-300 ease-in-out mt-[1px]
 					${isDark ? 'translate-x-7' : 'translate-x-0'}
 				`}

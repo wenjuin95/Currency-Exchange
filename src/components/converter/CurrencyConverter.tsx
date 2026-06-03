@@ -1,59 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
-import { FormattedCurrency } from "@/lib/types";
 import { HelperFunction } from "@/utils/helperFunction";
-import { currencyRegions } from "@/lib/country_code";
+import { useCurrencyRate } from "@/hooks/useCurrencyRate";
+import { currencySymbols } from "@/lib/country_code";
 
 export default function CurrencyConverter() {
-	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([]);
-
-	const [amount, setAmount] = useState<string>("");
-	const [selectCountry, setSelectCountry] = useState<string>("");
-
-	useEffect(() => {
-		async function getCountryCurrency() {
-			try {
-				const CountryCurrency = await HelperFunction.getAllCountryCurrencyAndRate();
-				setCurrencies(CountryCurrency);
-				const defaultCurrency = CountryCurrency.find(c => c.code === "USD") || CountryCurrency[0];
-				if (defaultCurrency) {
-					setSelectCountry(defaultCurrency.code);
-				}
-			} catch (error) {
-				console.error("Error fetching country currency data:", error);
-			}
-		}
-		getCountryCurrency();
-	}, []);
-
-	const result = useMemo(() => {
-		const numericAmount = Number(amount);
-		const currency = currencies.find(c => c.code === selectCountry);
-		if (!currency || Number.isNaN(numericAmount)) {
-			return "0.00";
-		}
-		const converted = (numericAmount / currency.unit) * currency.rate;
-
-		return converted.toFixed(2);
-	}, [amount, selectCountry, currencies]);
-
-	const groupedCurrencies = useMemo(() => {
-		return Object.entries(currencyRegions).map(
-			([region, codes]) => ({
-				region,
-				currencies: currencies.filter(currency => codes.includes(currency.code)),
-			})
-		);
-	}, [currencies]);
-
-	const handleAmountChange = (inputValue: string) => {
-		const sanitized = inputValue.replace(/[^0-9.]/g, "");
-
-		if (sanitized.split(".").length > 2) {
-		  return;
-		}
-
-		setAmount(sanitized);
-	}
+	const { amount, handleAmountChange } = HelperFunction.handleAmountInput("");
+	const { selectCountry, setSelectCountry, result, groupedCurrencies } = useCurrencyRate(amount);
+	const activeSymbol = currencySymbols[selectCountry] || "";
 
 	return (
 		// Restricted total width to max-w-md on mobile, stretching to max-w-lg on laptops
@@ -101,14 +53,23 @@ export default function CurrencyConverter() {
 						<label className="text-[10px] lg:text-xs font-bold text-theme-muted uppercase tracking-wide px-1">
 							Amount ({selectCountry})
 						</label>
-						<input
-							type="text"
-							inputMode="decimal"
-							placeholder="0.00"
-							value={amount}
-							onChange={(e) => handleAmountChange(e.target.value)}
-							className="border rounded-lg px-3 py-2 text-base lg:text-lg bg-theme-input text-theme-strong w-full focus:outline-none focus:ring-1 "
-						/>
+
+						{/* currency input with symbol */}
+						<div className="relative flex items-center">
+							<span className="absolute left-3 text-sm lg:text-base font-bold text-theme-muted pointer-events-none select-none">
+								{activeSymbol}
+							</span>
+							<input
+								type="text"
+								inputMode="decimal"
+								// Adds the contextual active symbol to the helper placeholder string
+								placeholder={`0.00`}
+								value={amount}
+								onChange={(e) => handleAmountChange(e.target.value)}
+								// Added padding-left (pl-9 or adjustments depending on symbol widths) to make space for the symbol overlay token
+								className="border rounded-lg pr-3 py-2 text-base lg:text-lg bg-theme-input text-theme-strong w-full focus:outline-none focus:ring-1 pl-10 font-bold"
+							/>
+						</div>
 					</div>
 
 					{/* Short, clean divider arrow */}

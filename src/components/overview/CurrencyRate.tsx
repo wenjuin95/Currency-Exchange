@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react"
-import { FormattedCurrency } from "@/lib/types";
-import { HelperFunction } from "@/utils/helperFunction";
+import { useCurrencyData } from "@/hooks/useCurrencyData";
 
 export default function CurrencyRate() {
-	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([])
-	const half = Math.ceil(currencies.length / 2);
-	const leftColumnData = currencies.slice(0, half);
-	const rightColumnData = currencies.slice(half);
-
-	useEffect(() => {
-		async function getAllCountryExchangeRate() {
-			const exchangeRate = await HelperFunction.getAllCountryCurrencyAndRate();
-			setCurrencies(exchangeRate)
-		}
-		getAllCountryExchangeRate()
-	}, [])
+	const { leftColumnData, rightColumnData } = useCurrencyData();
 
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-0 animate-fade-in animation-delay-200">
