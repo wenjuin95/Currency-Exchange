@@ -1,15 +1,20 @@
 @import "tailwindcss";
 
-@theme {
-  --color-text: #6b6375;
-  --color-text-h: #222222;
-  --color-bg: #e6e6e6;
-}
-
 :root {
-  --text: #616161;
-  --text-h: #222222;
-  --bg: #e6e6e6;
+
+  /* Theme color tokens */
+  --theme-bg: #e6e6e6;
+  --theme-muted-bg: rgba(0, 0, 0, 0.05);
+  --theme-strong-bg: rgba(0, 0, 0, 0.9);
+  --theme-muted-text: #616161;
+  --theme-strong-text: #222222;
+  --theme-card-bg: #f3f4f6; /* maps to gray-100 */
+  --theme-chart-accent: #4bc0c0; /* default chart accent */
+  --theme-chart-accent-bg: rgba(75, 192, 192, 0.5);
+  --theme-success: #22c55e;
+  --theme-muted-bg-10: rgba(0, 0, 0, 0.1);
+  --theme-input-bg: #f8fafc; /* maps to gray-50 */
+  --theme-input-bg-weak: rgba(248, 250, 252, 0.2);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -17,44 +22,16 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font: 18px/145% var(--mono);
+  background: var(--theme-bg);
 
   @media (max-width: 1024px) {
     font-size: 16px;
   }
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-} */
-
 #root {
   margin: 0 auto;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -69,7 +46,7 @@ h1,
 h2 {
   font-family: var(--mono);
   font-weight: 500;
-  color: var(--text-h);
+  color: var(--theme-strong-text);
 }
 
 h1 {
@@ -95,21 +72,6 @@ h2 {
 }
 p {
   margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }
 
 @layer utilities {
@@ -157,4 +119,22 @@ code {
   .animation-delay-800 {
     animation-delay: 800ms;
   }
+
+  /* Theme utility classes that map to CSS variables so color tokens live in one place */
+  .bg-theme-muted { background-color: var(--theme-muted-bg) !important; }
+  .bg-theme-strong { background-color: var(--theme-strong-bg) !important; }
+  .bg-theme-card { background-color: var(--theme-card-bg) !important; }
+
+  .text-theme-muted { color: var(--theme-muted-text) !important; }
+  .text-theme-strong { color: var(--theme-strong-text) !important; }
+
+  .border-theme-muted { border-color: var(--theme-muted-bg) !important; }
+
+  .text-chart-accent { color: var(--theme-chart-accent) !important; }
+  .bg-chart-accent { background-color: var(--theme-chart-accent-bg) !important; }
+  .bg-theme-success { background-color: var(--theme-success) !important; }
+  .text-theme-success { color: var(--theme-success) !important; }
+  .bg-theme-muted-10 { background-color: var(--theme-muted-bg-10) !important; }
+  .bg-theme-input { background-color: var(--theme-input-bg) !important; }
+  .bg-theme-input-weak { background-color: var(--theme-input-bg-weak) !important; }
 }

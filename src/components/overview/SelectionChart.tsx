@@ -39,7 +39,7 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 	}, [timeFrame, countryCode]); // Automatically re-runs whenever the user clicks a different timeframe button!
 
 	return (
-		<div className="w-full max-w-4xl mx-auto bg-black/5 rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
+		<div className="w-full max-w-4xl mx-auto bg-theme-muted rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
 			<div>
 				<h1 className="font-bold p-3 text-center">{currencies[0]?.unit || 1} {currencies[0]?.code || countryCode} = {currencies[0]?.rate ?? "-"} MYR</h1>
 			</div>
@@ -47,15 +47,15 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 			{/* Selection Buttons */}
 			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
 				{/* Timeframe */}
-				<div className="flex gap-1 bg-black/5  p-1 rounded-lg w-full sm:w-auto overflow-x-auto">
+				<div className="flex gap-1 bg-theme-muted  p-1 rounded-lg w-full sm:w-auto overflow-x-auto">
 					{(["7D", "1M", "5M", "1Y"] as Timeframe[]).map((range) => (
 						<button
 							key={range}
 							onClick={() => setTimeFrame(range)}
 							className={`flex-1 sm:flex-none text-center px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
 								timeFrame === range
-									? "bg-black/90 text-white shadow-sm"
-									: "text-gray-600 hover:text-black/90"
+									? "bg-theme-strong text-white shadow-sm"
+									: "text-theme-muted hover:text-theme-strong"
 							}`}
 						>
 							{range}
@@ -65,7 +65,7 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 
 				{/*Country*/}
 				<select
-					className="bg-black/5 p-1 rounded-lg text-sm w-full sm:w-auto"
+					className="bg-theme-muted p-1 rounded-lg text-sm w-full sm:w-auto"
 					value={countryCode}
 					onChange={(e) => setCountryCode(e.target.value)}
 					//disabled // For now, we only have USD data in the chart, so this dropdown is disabled. In the future, we can expand to support more currencies and enable this.

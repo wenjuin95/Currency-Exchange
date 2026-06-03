@@ -57,9 +57,9 @@ export default function CurrencyConverter() {
 
 	return (
 		// Restricted total width to max-w-md on mobile, stretching to max-w-lg on laptops
-		<div className="p-5 max-w-md lg:max-w-lg ml-0 lg:ml-4 w-full transition-all duration-200">
-			<div className="p-5 lg:p-6 bg-white rounded-xl shadow-sm border border-black/5 mt-6">
-				<h2 className="text-base lg:text-lg font-bold text-gray-800 mb-4">
+		<div className="p-5 max-w-md lg:max-w-lg ml-0 lg:ml-4 w-full transition-all animate-fade-in animation-delay-200">
+			<div className="p-5 lg:p-6 bg-theme-muted rounded-xl shadow-sm border border-theme-muted mt-6">
+				<h2 className="text-base lg:text-lg font-bold text-theme-strong mb-4">
 					Currency Converter
 				</h2>
 
@@ -68,13 +68,13 @@ export default function CurrencyConverter() {
 
 					{/* Dropdown Row - Stacked and fills the card width naturally */}
 					<div className="flex flex-col gap-y-1">
-						<label className="text-[10px] lg:text-xs font-bold text-gray-400 uppercase tracking-wide px-1">
+						<label className="text-[10px] lg:text-xs font-bold text-theme-muted uppercase tracking-wide px-1">
 							Select Currency
 						</label>
 						<select
 							value={selectCountry}
 							onChange={(e) => setSelectCountry(e.target.value)}
-							className="border rounded-lg px-3 py-2 text-sm bg-gray-50 font-bold focus:outline-none w-full cursor-pointer"
+							className="border rounded-lg px-3 py-2 text-sm bg-theme-input font-bold focus:outline-none w-full cursor-pointer"
 						>
 							{groupedCurrencies.map(group => (
 								<optgroup
@@ -96,7 +96,7 @@ export default function CurrencyConverter() {
 
 					{/* Input Row - Stacked right underneath */}
 					<div className="flex flex-col gap-y-1 mt-1">
-						<label className="text-[10px] lg:text-xs font-bold text-gray-400 uppercase tracking-wide px-1">
+						<label className="text-[10px] lg:text-xs font-bold text-theme-muted uppercase tracking-wide px-1">
 							Amount ({selectCountry})
 						</label>
 						<input
@@ -105,19 +105,19 @@ export default function CurrencyConverter() {
 							placeholder="0.00"
 							value={amount}
 							onChange={(e) => handleAmountChange(e.target.value)}
-							className="border rounded-lg px-3 py-2 text-base lg:text-lg font-black w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/20"
+							className="border rounded-lg px-3 py-2 text-base lg:text-lg font-black w-full focus:outline-none focus:ring-2 bg-theme-input-weak"
 						/>
 					</div>
 
 					{/* Short, clean divider arrow */}
-					<div className="text-xs font-bold text-gray-400 px-1 py-1">↓ converts to</div>
+					<div className="text-xs font-bold text-theme-muted px-1 py-1">↓ converts to</div>
 
 					{/* Result Block */}
-					<div className="flex items-center justify-between p-3 lg:p-4 bg-black/10 rounded-xl border border-black/5">
-						<span className="text-xs font-bold text-black-800 uppercase tracking-wider">
+					<div className="flex items-center justify-between p-3 lg:p-4 bg-theme-muted-10 rounded-xl border border-theme-muted">
+						<span className="text-xs font-bold text-theme-strong uppercase tracking-wider">
 							Total Estimation
 						</span>
-						<span className="text-xl lg:text-2xl font-black text-black">
+						<span className="text-xl lg:text-2xl font-black text-theme-strong">
 							RM {result}
 						</span>
 					</div>

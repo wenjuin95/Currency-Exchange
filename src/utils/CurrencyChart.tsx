@@ -25,6 +25,31 @@ ChartJS.register(
 );
 
 export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
+// read theme color from CSS variables (falls back to defaults for SSR)
+	const getThemeColor = (varName: string, fallback: string) => {
+		if (typeof window === 'undefined') return fallback;
+		const v = getComputedStyle(document.documentElement).getPropertyValue(varName);
+		return v ? v.trim() : fallback;
+	};
+
+	const themeChartAccent = getThemeColor('--theme-chart-accent', 'rgb(75, 192, 192)');
+	const themeChartAccentBg = getThemeColor('--theme-chart-accent-bg', 'rgba(75, 192, 192, 0.5)');
+
+	const hexToRgba = (hex: string, alpha = 1) => {
+		// handle rgb() or rgba() passthrough
+		if (!hex) return `rgba(75,192,192,${alpha})`;
+		hex = hex.trim();
+		if (hex.startsWith('rgb')) return hex.replace(/rgb(a)?\(([^)]+)\)/, `rgba($2,${alpha})`);
+		if (hex.startsWith('#')) {
+			const h = hex.replace('#', '');
+			const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+			const r = (bigint >> 16) & 255;
+			const g = (bigint >> 8) & 255;
+			const b = bigint & 255;
+			return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+		}
+		return themeChartAccentBg;
+	};
 // 3. Compute chartData dynamically on the fly using useMemo instead of useEffect + useState
 	const chartData = useMemo(() => {
 		if (!historicalData || historicalData.length === 0) return null;
@@ -54,8 +79,8 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 				{
 					label: 'Exchange Rate',
 					data: rates,
-					borderColor: 'rgb(75, 192, 192)',
-					backgroundColor: 'rgba(75, 192, 192, 0.5)',
+					borderColor: themeChartAccent,
+					backgroundColor: hexToRgba(themeChartAccent, 0.5),
 					tension: 0.2,
 				},
 			],
@@ -98,7 +123,7 @@ export default function CurrencyChart({ historicalData }: CurrencyChartProps) {
 		},
 	};
 
-	if (!chartData) return <div className="text-sm text-gray-500">Processing graph...</div>;
+	if (!chartData) return <div className="text-sm text-theme-muted">Processing graph...</div>;
 
 	return (
 		<div className="relative w-full h-[250px] md:h-[400px]">
