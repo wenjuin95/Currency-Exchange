@@ -1,6 +1,8 @@
 import CurrencyChart from "@/utils/CurrencyChart"
 import { useChartData } from "@/hooks/useChartData";
 import { CurrencyWidgetProps, Timeframe} from "@/lib/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidgetProps) {
 	const {
@@ -9,11 +11,20 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 		timeFrame,
 		setTimeFrame,
 		chartData,
-		activeCurrency
+		activeCurrency,
+		isLoading
 	} = useChartData(defaultCurrency);
 
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center h-64">
+				<FontAwesomeIcon icon={faSpinner} className="animate-spin text-2xl text-theme-muted" />
+			</div>
+		)
+	}
+
 	return (
-		<div className="w-full max-w-4xl mx-auto bg-theme-muted rounded-xl shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
+		<div className="w-full max-w-6xl bg-theme-muted rounded-xl border border-white shadow-md p-4 sm:p-6 animate-fade-in animation-delay-200">
 			{/* title and current rate */}
 			<div>
 				<h1 className="font-bold p-3 text-center tracking-tight text-lg lg:text-xl text-theme-strong">

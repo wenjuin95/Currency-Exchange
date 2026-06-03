@@ -1,15 +1,17 @@
 import { useState, useEffect, useMemo } from "react";
 import { FormattedCurrency } from "@/lib/types";
 import { HelperFunction } from "@/utils/helperFunction";
-import { currencyRegions } from "@/lib/country_code";
+import { currencyRegionsConverter } from "@/lib/country_code";
 
 export function useCurrencyRate(amount: string) {
 	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([]);
 	const [selectCountry, setSelectCountry] = useState<string>("");
+		const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		async function getCountryCurrency() {
 			try {
+				setIsLoading(true);
 				const CountryCurrency = await HelperFunction.getAllCountryCurrencyAndRate();
 				setCurrencies(CountryCurrency);
 				const defaultCurrency = CountryCurrency.find(c => c.code === "USD") || CountryCurrency[0];
@@ -18,6 +20,8 @@ export function useCurrencyRate(amount: string) {
 				}
 			} catch (error) {
 				console.error("Error fetching country currency data:", error);
+			} finally {
+				setIsLoading(false);
 			}
 		}
 		getCountryCurrency();
@@ -35,7 +39,7 @@ export function useCurrencyRate(amount: string) {
 	}, [amount, selectCountry, currencies]);
 
 	const groupedCurrencies = useMemo(() => {
-		return Object.entries(currencyRegions).map(
+		return Object.entries(currencyRegionsConverter).map(
 			([region, codes]) => ({
 				region,
 				currencies: currencies.filter(currency => codes.includes(currency.code)),
@@ -47,6 +51,7 @@ export function useCurrencyRate(amount: string) {
 		selectCountry,
 		setSelectCountry,
 		result,
-		groupedCurrencies
+		groupedCurrencies,
+		isLoading
 	}
 }

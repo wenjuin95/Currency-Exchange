@@ -8,11 +8,13 @@ export function useChartData(defaultCurrency: string) {
 	const [timeFrame, setTimeFrame] = useState<Timeframe>('7D');
 	const [chartData, setChartData] = useState<HistoricalRateData[]>([]);
 	const [activeCurrency, setActiveCurrency] = useState<FormattedCurrency | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		// fetch the data with required parameters whenever countryCode or timeFrame changes
 		async function retrieveTimeFrameData() {
 			try {
+				setIsLoading(true);
 				const requiredTargets = HelperFunction.getRequiredMonths(timeFrame);
 				const results = await Api.getHistoricalRates(countryCode, requiredTargets);
 				if (results) {
@@ -24,12 +26,15 @@ export function useChartData(defaultCurrency: string) {
 				}
 			} catch (error) {
 				console.error("Error fetching historical chart rates:", error);
+			} finally {
+				setIsLoading(false);
 			}
 		}
 
 		// get the selected country's current currency and rate to display in the chart title
 		async function getTargetedCountryCurrencyAndRate() {
 			try {
+				setIsLoading(true);
 				const allCurrencies = await HelperFunction.getAllCountryCurrencyAndRate();
 				const targetCurrency = allCurrencies.find(
 					(item: FormattedCurrency) => item.code === countryCode
@@ -39,6 +44,8 @@ export function useChartData(defaultCurrency: string) {
 				}
 			} catch (error) {
 				console.error("Error matching targeted country profile:", error);
+			} finally {
+				setIsLoading(false);
 			}
 		}
 
@@ -53,5 +60,6 @@ export function useChartData(defaultCurrency: string) {
 		setTimeFrame,
 		chartData,
 		activeCurrency,
+		isLoading
 	}
 }

@@ -19,7 +19,7 @@ export default function Overview() {
 
 	return (
 		<div className="p-5">
-			<div className="flex items-center justify-between gap-x-4 animate-fade-in animation-delay-300">
+			<div className="flex items-center gap-x-4 animate-fade-in animation-delay-300">
 				<h2>Exchange Rate Overview</h2>
 
 				{/* update status */}
@@ -38,7 +38,7 @@ export default function Overview() {
 			</div>
 
 			{/* navigate two views: all country rates vs individual currency charts */}
-			<div className="flex gap-1 bg-theme-muted p-1 rounded-lg mt-3 w-fit border border-theme-muted animate-fade-in animation-delay-400">
+			<div className="flex gap-1 bg-theme-muted-10 p-1 rounded-lg mt-3 w-fit border border-theme-muted animate-fade-in animation-delay-400">
 				<button
 					type="button"
 					onClick={() => setActiveView("rates")}
@@ -68,7 +68,7 @@ export default function Overview() {
 				{activeView === "rates" ? (
 					<CurrencyRate />
 				):(
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl">
 						<SelectionChart defaultCurrency="USD" />
 						<SelectionChart defaultCurrency="SGD" />
 					</div>

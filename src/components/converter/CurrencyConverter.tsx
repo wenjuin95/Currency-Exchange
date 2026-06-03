@@ -1,16 +1,26 @@
 import { HelperFunction } from "@/utils/helperFunction";
 import { useCurrencyRate } from "@/hooks/useCurrencyRate";
 import { currencySymbols } from "@/lib/country_code";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function CurrencyConverter() {
 	const { amount, handleAmountChange } = HelperFunction.handleAmountInput("");
-	const { selectCountry, setSelectCountry, result, groupedCurrencies } = useCurrencyRate(amount);
+	const { selectCountry, setSelectCountry, result, groupedCurrencies, isLoading } = useCurrencyRate(amount);
 	const activeSymbol = currencySymbols[selectCountry] || "";
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center h-64">
+				<FontAwesomeIcon icon={faSpinner} className="animate-spin text-2xl text-theme-muted" />
+			</div>
+		)
+	}
 
 	return (
 		// Restricted total width to max-w-md on mobile, stretching to max-w-lg on laptops
 		<div className="p-5 max-w-md lg:max-w-lg ml-0 lg:ml-4 w-full transition-all animate-fade-in animation-delay-200">
-			<div className="p-5 lg:p-6 bg-theme-muted rounded-xl shadow-sm border border-theme-muted mt-6">
+			<div className="p-5 lg:p-6 bg-theme-muted rounded-xl shadow-sm border border-white mt-6">
 				<h2 className="text-base lg:text-lg font-bold text-theme-strong mb-4">
 					Currency Converter
 				</h2>

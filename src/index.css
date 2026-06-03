@@ -4,7 +4,7 @@
 
   /* Theme color tokens */
   --theme-bg: #e6e6e6;
-  --theme-muted-bg: rgba(0, 0, 0, 0.05);
+  --theme-muted-bg: rgba(238, 238, 238, 0.05);
   --theme-strong-bg: rgba(0, 0, 0, 0.9);
   --theme-muted-text: #616161;
   --theme-strong-text: #222222;
@@ -57,7 +57,7 @@ h1 {
   letter-spacing: -1.68px;
   margin: 32px 0;
   @media (max-width: 1024px) {
-    font-size: 34px;
+    font-size: 30px;
     margin: 20px 0;
   }
 }
@@ -170,7 +170,7 @@ p {
   --theme-chart-accent: #00fff2;
   --theme-chart-accent-bg: rgba(192,132,252,0.15);
   --theme-strong-bg: rgba(255,255,255,0.03);
-  --theme-muted-bg: rgba(255,255,255,0.03);
+  --theme-muted-bg: rgba(255, 255, 255, 0.03);
   --theme-muted-bg-10: rgba(255,255,255,0.06);
   --theme-input-bg: rgba(255,255,255,0.02);
   --theme-input-bg-weak: rgba(255,255,255,0.03);

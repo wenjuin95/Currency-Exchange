@@ -93,9 +93,67 @@ export const use100units = new Set([
 	"TWD",
 ])
 
-export const currencyRegions: Record<string, string[]> = {
+export const currencyRegionsConverter: Record<string, string[]> = {
 	"Popular": ["USD", "SGD", "JPY", "CNY", "KRW"],
 
+	"Southeast Asia": [
+		"SGD",
+		"MYR",
+		"IDR",
+		"THB",
+		"PHP",
+		"VND",
+		"KHR",
+		"MMK",
+		"BND",
+	],
+
+	"East Asia": [
+		"JPY",
+		"KRW",
+		"CNY",
+		"HKD",
+		"TWD",
+	],
+
+	"South Asia": [
+		"INR",
+		"PKR",
+		"NPR",
+	],
+
+	"Middle East": [
+		"AED",
+		"SAR",
+	],
+
+	"Europe": [
+		"EUR",
+		"GBP",
+		"CHF",
+	],
+
+	"North America": [
+		"USD",
+		"CAD",
+	],
+
+	"Oceania": [
+		"AUD",
+		"NZD",
+	],
+
+	"Africa": [
+		"EGP",
+	],
+
+	"International": [
+		"SDR",
+	],
+};
+
+
+export const currencyRegions: Record<string, string[]> = {
 	"Southeast Asia": [
 		"SGD",
 		"MYR",
