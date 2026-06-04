@@ -1,5 +1,9 @@
 # Malaysia Currency Exchange Rate
 
+a lightweight, ad-free currency exchange web application tailored specifically for the Malaysian market. It connects directly to the official Bank Negara Malaysia (BNM) API to deliver authoritative, real-time exchange rates straight from the local primary source without any third-party data latency or intrusive advertisements.
+
+🔗 **Live Demo:** https://myr-currency-exchange.vercel.app
+
 ## Problem
 - **Overcomplicated Interfaces:** Most currency converters are built for a global audience, forcing users to wade through hundreds of irrelevant currency pairs just to find what they need.
 - **Lack of Local Focus:** As someone living in Malaysia, my primary need is simply converting other currencies back to Malaysian Ringgit (MYR). Generic tools don't prioritize this, making the workflow slow and inefficient.
@@ -12,7 +16,6 @@
 - **Authoritative Accuracy:**  Leverages the primary local regulatory source to guarantee official, real-time Malaysian Ringgit exchange rates.
 - **Clean, Ad-Free UI:**      Provides a streamlined, lightweight interface designed intentionally to deliver critical financial data quickly and without any distracting advertisement components.
 
-🔗 **Live Demo:** https://myr-currency-exchange.vercel.app
 
 ## Tech Stack
 | Layer | Technology | Purpose |
