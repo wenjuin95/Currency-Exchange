@@ -4,5 +4,6 @@
 			"source": "/bnm/api/:path*",
 			"destination": "https://api.bnm.gov.my/:path*"
 		}
-	]
+	],
+	"outputDirectory": "dist"
 }
