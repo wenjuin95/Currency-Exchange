@@ -28,6 +28,36 @@ export const countryNames: Record<string, string> = {
   VND: "Vietnam",
 };
 
+export const currencyToCountry: Record<string, string> = {
+  AED: "AE",
+  AUD: "AU",
+  BND: "BN",
+  CAD: "CA",
+  CHF: "CH",
+  CNY: "CN",
+  EGP: "EG",
+  EUR: "EU",
+  GBP: "GB",
+  HKD: "HK",
+  IDR: "ID",
+  INR: "IN",
+  JPY: "JP",
+  KHR: "KH",
+  KRW: "KR",
+  MMK: "MM",
+  NPR: "NP",
+  NZD: "NZ",
+  PHP: "PH",
+  PKR: "PK",
+  SAR: "SA",
+  SDR: "XDR",
+  SGD: "SG",
+  THB: "TH",
+  TWD: "TW",
+  USD: "US",
+  VND: "VN",
+};
+
 export const currencySymbols: Record<string, string> = {
   AED: "د.إ",
   AUD: "$",

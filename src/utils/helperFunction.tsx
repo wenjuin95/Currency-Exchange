@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Api } from "@/lib/api";
-import { countryNames, per100UnitCurrencies, use1000units, use100units } from "@/lib/country_code";
+import { currencyToCountry, countryNames, per100UnitCurrencies, use1000units, use100units } from "@/lib/country_code";
 import { HistoricalRateData, YearMonthPair, Timeframe, FormattedCurrency } from "@/lib/types"
+import * as Flags from "country-flag-icons/react/1x1";
+
+	interface CountryFlagProps {
+		currencyCode: string
+		className?: string
+	}
 
 export class HelperFunction {
 	/**
@@ -191,5 +197,24 @@ export class HelperFunction {
 			amount,
 			handleAmountChange
 		};
+	}
+
+	static CountryFlag({currencyCode, className = "w-10, h-10"}: CountryFlagProps) {
+		if (currencyCode === "SDR") {
+			return (
+				<div className={`${className} rounded-full overflow-hidden flex items-center justify-center bg-gray-200`}>
+					<img src="/XDR.png" alt="SDR"/>
+				</div>
+			)
+		}
+		const countryCode = currencyToCountry[currencyCode];
+		if (!countryCode) return <span>🏳️</span>;
+		const Flag = Flags[countryCode as keyof typeof Flags];
+		if (!Flag) return <span>🏳️</span>;
+		return (
+			<div className={`${className} rounded-full overflow-hidden`}>
+				<Flag className="w-full h-full" />
+			</div>
+		);
 	}
 }

@@ -1,6 +1,8 @@
 import { useCurrencyData } from "@/hooks/useCurrencyData";
+import { HelperFunction } from "@/utils/helperFunction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 
 export default function CurrencyRate() {
 	const { regionsData, isLoading } = useCurrencyData();
@@ -30,7 +32,8 @@ export default function CurrencyRate() {
 					</div>
 
 					{/* Table Column Labels Header */}
-					<div className="grid grid-cols-3 gap-x-4 pb-1.5 text-[11px] font-bold text-theme-muted uppercase tracking-wider px-2">
+					<div className="grid grid-cols-4 gap-x-4 pb-1.5 text-[11px] font-bold text-theme-muted uppercase tracking-wider px-2">
+						<div>Flag</div>
 						<div>Country</div>
 						<div className="text-center">Unit / Code</div>
 						<div className="text-right">MYR Value</div>
@@ -41,14 +44,18 @@ export default function CurrencyRate() {
 						{group.currencies.map((currency, index) => (
 							<div
 								key={`${group.region}-${currency.code}-${index}`}
-								className="grid grid-cols-3 gap-x-4 py-2.5 px-2 rounded-lg items-center text-sm font-bold text-theme-strong hover:bg-theme-muted-10 transition-colors"
+								className="grid grid-cols-4 gap-x-4 py-2.5 px-2 rounded-lg items-center text-sm font-bold text-theme-strong hover:bg-theme-muted-10 transition-colors"
 							>
+								<HelperFunction.CountryFlag
+									currencyCode={currency.code}
+									className="w-8 h-8"
+								/>
 								<div className="text-theme-strong font-semibold">{currency.country}</div>
 								<div className="text-center font-mono text-xs text-theme-muted bg-theme-input py-0.5 rounded border border-theme-muted/50">
 									{currency.unit.toLocaleString()} {currency.code}
 								</div>
 								<div className="text-right font-black text-theme-strong">
-									{Number(currency.rate).toFixed(4)}
+									RM {Number(currency.rate).toFixed(4)}
 								</div>
 							</div>
 						))}
