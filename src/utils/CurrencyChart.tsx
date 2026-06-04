@@ -11,7 +11,6 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { CurrencyChartProps, RateEntry, HistoricalRateData} from '@/lib/types';
-import { per100UnitCurrencies } from '@/lib/country_code';
 
 // 1. Register Chart.js modules
 ChartJS.register(
