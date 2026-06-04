@@ -1,7 +1,7 @@
 import { YearMonthPair } from "@/lib/types";
 import { HelperFunction } from "@/utils/helperFunction";
 
-const baseUrl = "/bnm-api/public/exchange-rate"
+const baseUrl = import.meta.env.VITE_API_BASE || "";
 
 export class Api {
 	static async getAllCountryExchangeRate() {
