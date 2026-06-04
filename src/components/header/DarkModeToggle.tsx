@@ -49,7 +49,7 @@ export default function DarkModeToggle() {
 				{/* 3. The Icon nested inside the shifting circle */}
 				<FontAwesomeIcon
 					icon={isDark ? faMoon : faSun}
-					className="text-xs text-theme-bg transition-transform duration-300"
+					className={`text-xs transition-transform duration-300 ${isDark ? 'text-yellow-200' : 'text-yellow-400'}`}
 				/>
 			</span>
 		</button>
