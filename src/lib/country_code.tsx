@@ -124,8 +124,6 @@ export const use100units = new Set([
 ])
 
 export const currencyRegionsConverter: Record<string, string[]> = {
-	"Popular": ["USD", "SGD", "JPY", "CNY", "KRW"],
-
 	"Southeast Asia": [
 		"SGD",
 		"MYR",

@@ -1,6 +1,7 @@
 import CurrencyChart from "@/utils/CurrencyChart"
 import { useChartData } from "@/hooks/useChartData";
 import { CurrencyWidgetProps, Timeframe} from "@/lib/types";
+import { countryNames } from "@/lib/country_code"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
@@ -58,11 +59,12 @@ export default function SelectionChart({ defaultCurrency = "USD" }: CurrencyWidg
 					onChange={(e) => setCountryCode(e.target.value)}
 					//disabled // For now, we only have USD data in the chart, so this dropdown is disabled. In the future, we can expand to support more currencies and enable this.
 				>
-					<option value="USD">USD (United States Dollar)</option>
-					<option value="SGD">SGD (Singapore Dollar)</option>
-					<option value="CNY">CNY (Chinese Yuan)</option>
-					<option value="JPY">JPY (Japanese Yen)</option>
-					<option value="KRW">KRW (South Korean Won)</option>
+					<option value="" disabled>Select Country</option>
+					{Object.entries(countryNames).map(([code, name]) => (
+						<option key={code} value={code}>
+							{name} ({code})
+						</option>
+					))}
 				</select>
 			</div>
 
