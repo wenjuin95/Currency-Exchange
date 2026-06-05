@@ -20,6 +20,7 @@ export class Api {
 
 			const dataList = await res.json()
 			const data = JSON.stringify(dataList, null, 2)
+			// console.log("api data: ", data)
 			return data
 		} catch (err) {
 			console.error(err)

@@ -6,15 +6,22 @@ import { currencyRegions } from "@/lib/country_code";
 export function useCurrencyData() {
 	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [Error, setError] = useState<string>("");
 
 	useEffect(() => {
 		async function getAllCountryExchangeRate() {
 			try {
 				setIsLoading(true);
 				const exchangeRate = await HelperFunction.getAllCountryCurrencyAndRate();
+				if (exchangeRate.length === 0) {
+					// console.log("No currency data fetched.");
+					setError("Failed to fetch currency data. Please try again later.");
+					return;
+				}
 				setCurrencies(exchangeRate);
 			} catch (error) {
 				console.error("Error fetching exchange rates:", error);
+				setError("Failed to fetch currency data. Please try again later.");
 			} finally {
 				setIsLoading(false);
 			}
@@ -40,5 +47,5 @@ export function useCurrencyData() {
 			.filter(group => group.currencies.length > 0);
 	}, [currencies]);
 
-	return { regionsData, isLoading };
+	return { regionsData, isLoading, Error };
 }

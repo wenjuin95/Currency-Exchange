@@ -92,7 +92,8 @@ export class HelperFunction {
 				? JSON.parse(exchangeRateData)
 				: exchangeRateData;
 
-			if (!exchangeRateList?.data || !Array.isArray(exchangeRateList.data)) {
+			if (!exchangeRateList?.data || !Array.isArray(exchangeRateList.data) || exchangeRateList.meta.total_result !== 27) {
+				// console.error("Unexpected data format or missing data in exchange rate response:", exchangeRateList);
 				return [];
 			}
 

@@ -6,7 +6,7 @@ import { currencyRegionsConverter } from "@/lib/country_code";
 export function useCurrencyRate(amount: string) {
 	const [currencies, setCurrencies] = useState<FormattedCurrency[]>([]);
 	const [selectCountry, setSelectCountry] = useState<string>("");
-		const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		async function getCountryCurrency() {
@@ -52,6 +52,7 @@ export function useCurrencyRate(amount: string) {
 		setSelectCountry,
 		result,
 		groupedCurrencies,
-		isLoading
+		isLoading,
+		Error
 	}
 }
